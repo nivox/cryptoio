@@ -1,0 +1,18 @@
+env = Environment(CPPPATH=['.', '../include'])
+
+CRYPTOIO_LIB_SRC = ['cryptoio.c',
+                   'cryptouti.c',
+                   'buffer.c']
+
+CRYPTOIO_EXE_SRC = ['cryptio_cli.c']
+
+TEST_EXE_SRC = ['testSeek.c']
+
+env.StaticLibrary(target='libcryptoio', source=CRYPTOIO_LIB_SRC)
+env.Program(target='cryptoio', source=CRYPTOIO_EXE_SRC, LIBS=['cryptoio', 'crypto'], LIBPATH='.')
+
+testCleanO = env.Object(target='testSeek-clean', source=TEST_EXE_SRC)
+env.Program(target='testClean', source=testCleanO, LIBS=['cryptoio', 'crypto'], LIBPATH='.')
+
+testCryptoO = env.Object(target='testSeek-cryptoio', source=TEST_EXE_SRC, CPPDEFINES=['CRYPTOIO'])
+env.Program(target='testCrypto', source=testCryptoO, LIBS=['cryptoio', 'crypto'], LIBPATH='.')
